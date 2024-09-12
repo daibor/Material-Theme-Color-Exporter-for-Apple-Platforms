@@ -4,6 +4,8 @@ This project provides a simple web-based tool to convert Material Theme JSON fil
 
 The tool allows you to export the color scheme generated from the [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/) into a format suitable for Xcode, so you can quickly apply the generated theme to your app.
 
+The tool is web-based and requires no installation. Simply visit [Material Theme Color Exporter for Apple Platforms](https://material-theme-color-exporter-for-apple-platforms.vercel.app) through your web browser and use it to process your Material Theme JSON files.
+
 ## Features
 
 - Converts Material Theme JSON files into Xcode asset catalogs.
@@ -15,14 +17,11 @@ The tool allows you to export the color scheme generated from the [Material Them
 1. Visit [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/).
 2. Click the top-right menu and select the `Export` option from the drawer on the right-hand side.
 3. Choose `Material Theme (JSON)` and download the generated file.
-4. Drag and drop the JSON file onto the provided tool interface.
-5. Click the "Convert" button. A zip file will automatically download.
-6. Extract the zip file and drag its contents into your Xcode project’s `Assets` folder.
-7. You now have all the necessary theme colors directly in your Xcode asset catalog!
-
-## Installation
-
-The tool is web-based and requires no installation. Simply access it through your web browser and use it to process your Material Theme JSON files.
+4. Go to [Material Theme Color Exporter for Apple Platforms](https://material-theme-color-exporter-for-apple-platforms.vercel.app).
+5. Drag and drop the JSON file onto the web interface.
+6. Click the "Convert" button. A zip file will automatically download.
+7. Extract the zip file and drag its contents into your Xcode project’s `Assets` folder.
+8. You now have all the necessary theme colors directly in your Xcode asset catalog!
 
 ## Code Generation
 
