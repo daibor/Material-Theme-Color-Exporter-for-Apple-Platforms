@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import './App.css'; // 引入样式文件
@@ -52,7 +52,7 @@ function createContentsJson(lightColor, darkColor) {
 // Create colorset directory and write file to JSZip
 function createColorsetDirectory(zip, colorName, lightColor, darkColor) {
   const formattedColorName = colorName.replace(/_/g, '-');
-  const colorSetDir = `Assets.xcassets/${formattedColorName.charAt(0).toUpperCase() + formattedColorName.slice(1)}.colorset/`;
+  const colorSetDir = `Assets.xcassets/${formattedColorName}.colorset/`;
 
   const contentsJson = createContentsJson(lightColor, darkColor);
   zip.file(`${colorSetDir}Contents.json`, contentsJson);
@@ -92,6 +92,7 @@ const AssetGenerator = () => {
   const [jsonInput, setJsonInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleGenerate = () => {
     try {
@@ -109,16 +110,24 @@ const AssetGenerator = () => {
     }
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
+  const handleFileInput = (file) => {
     const reader = new FileReader();
     reader.onload = (event) => {
       setJsonInput(event.target.result);
       setErrorMessage('');
     };
     reader.readAsText(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file.type === 'application/json') {
+      handleFileInput(file);
+    } else {
+      setErrorMessage('请上传 JSON 文件');
+    }
   };
 
   const handleDragOver = (e) => {
@@ -130,6 +139,19 @@ const AssetGenerator = () => {
     setIsDragging(false);
   };
 
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file.type === 'application/json') {
+      handleFileInput(file);
+    } else {
+      setErrorMessage('请上传 JSON 文件');
+    }
+  };
+
   return (
     <div className="app-container">
       <div
@@ -137,6 +159,7 @@ const AssetGenerator = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
+        onClick={handleClick}
       >
         <h2>Material Theme Color Exporter</h2>
         <p>Drag and drop JSON file or paste content in the input box</p>
@@ -148,6 +171,13 @@ const AssetGenerator = () => {
           }}
           placeholder="Drag and drop JSON file or paste content here"
           rows={10}
+        />
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+          accept=".json"
         />
         <br />
         {errorMessage && <p className="error-message">{errorMessage}</p>}
